@@ -12,6 +12,11 @@
 	:global(body) {
 		background-color: theme(colors.neutral.950);
 	}
+	:global(body),
+	:global(html) {
+		width: 100%;
+		min-height: 100vh;
+	}
 	:global(*) {
 		color: white;
 		font-family: "Source Code Pro", sans-serif;
