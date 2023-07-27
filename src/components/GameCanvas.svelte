@@ -11,6 +11,8 @@
 	let rows = 0;
 	let pixelRatio = 0;
 	let gameIntervalId: number;
+	let transitionId: number;
+	let currentAnimationHandle: number;
 	let gameGrid: Array<Array<number>>;
 
 	function handleResize() {
@@ -25,15 +27,27 @@
 	}
 
 	function handleGameInit() {
-		gameGrid = new Array(columns)
-			.fill(null)
-			.map(() => new Array(rows).fill(null).map(() => Math.floor(Math.random() * 2)));
+		context.clearRect(0, 0, screenWidth, screenHeight);
+		clearTimeout(transitionId);
+		clearInterval(gameIntervalId);
+		canvas.style.opacity = "0";
 
-		if (gameIntervalId) {
-			clearInterval(gameIntervalId);
+		if (currentAnimationHandle) {
+			cancelAnimationFrame(currentAnimationHandle);
 		}
 
-		gameIntervalId = setInterval(handleGameStep, 1000 / fps);
+		gameGrid = new Array(columns)
+			.fill(null)
+			.map(() => new Array(rows).fill(null).map(() => (Math.random() < 0.1 ? 1 : 0)));
+
+		transitionId = setTimeout(() => {
+			canvas.style.opacity = "1";
+		}, 500);
+
+		gameIntervalId = setInterval(() => {
+			handleGameStep();
+			currentAnimationHandle = requestAnimationFrame(handleGameRender);
+		}, 1000 / fps);
 	}
 
 	function handleGameStep() {
@@ -73,8 +87,6 @@
 		}
 
 		gameGrid = newGrid;
-
-		handleGameRender();
 	}
 
 	function handleGameRender() {
@@ -101,6 +113,19 @@
 		}
 	}
 
+	function handleMouseMove({ x, y }: MouseEvent) {
+		const column = Math.floor(x / resolution);
+		const row = Math.floor(y / resolution);
+
+		const columnCell = gameGrid?.[column];
+		const cell = columnCell?.[row];
+
+		if (cell !== undefined) {
+			columnCell[row] = 1;
+			requestAnimationFrame(handleGameRender);
+		}
+	}
+
 	onMount(() => {
 		context = canvas.getContext("2d")!;
 
@@ -112,7 +137,7 @@
 	});
 </script>
 
-<svelte:window on:resize|passive={handleResize} />
+<svelte:window on:resize={handleResize} on:mousemove|trusted={handleMouseMove} />
 <canvas
 	bind:this={canvas}
 	width={screenWidth * pixelRatio}
