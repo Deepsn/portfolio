@@ -142,5 +142,6 @@
 	bind:this={canvas}
 	width={screenWidth * pixelRatio}
 	height={screenHeight * pixelRatio}
-	style="opacity: 1; pointer-events: none; transition: opacity 1.2s ease 0s"
+	class="absolute opacity-100 pointer-events-none right-0 top-0"
+	style="transition: opacity 1.2s ease 0s"
 />
