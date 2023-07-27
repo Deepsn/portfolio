@@ -95,15 +95,15 @@
 		for (let col = 0; col < gameGrid.length; col++) {
 			for (let row = 0; row < gameGrid[col].length; row++) {
 				const cell = gameGrid[col][row];
-				let color = "rgba(0, 0, 0, 0)";
+				let color = "black";
 
 				switch (cell) {
 					case 1:
-						color = "white";
+						color = "rgba(200, 200, 200, 0.2)";
 						break;
 					case -1:
 						gameGrid[col][row] = 0;
-						color = "rgba(200, 200, 200, 0.2)";
+						color = "rgba(100, 100, 100, 0.2)";
 						break;
 				}
 
