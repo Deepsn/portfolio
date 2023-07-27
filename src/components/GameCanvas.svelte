@@ -113,9 +113,9 @@
 		}
 	}
 
-	function handleMouseMove({ x, y }: MouseEvent) {
-		const column = Math.floor(x / resolution);
-		const row = Math.floor(y / resolution);
+	function handleMouseMove({ pageX, pageY }: MouseEvent) {
+		const column = Math.floor(pageX / resolution);
+		const row = Math.floor(pageY / resolution);
 
 		const columnCell = gameGrid?.[column];
 		const cell = columnCell?.[row];
