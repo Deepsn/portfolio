@@ -20,8 +20,8 @@
 		screenHeight = window.innerHeight;
 		pixelRatio = window.devicePixelRatio;
 
-		columns = Math.floor(screenWidth / resolution);
-		rows = Math.floor(screenHeight / resolution);
+		columns = Math.round(screenWidth / resolution);
+		rows = Math.round(screenHeight / resolution);
 
 		handleGameInit();
 	}
