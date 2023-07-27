@@ -1,9 +1,11 @@
 <script>
 	import "@/app.css";
+	import GameCanvas from "@/components/GameCanvas.svelte";
 	import Navbar from "@/components/Navbar.svelte";
 </script>
 
 <Navbar />
+<GameCanvas />
 <slot />
 
 <style lang="postcss">
