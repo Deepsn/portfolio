@@ -9,7 +9,6 @@
 	let resolution = 10;
 	let columns = 0;
 	let rows = 0;
-	let pixelRatio = 0;
 	let gameIntervalId: number;
 	let transitionId: number;
 	let currentAnimationHandle: number;
@@ -18,26 +17,11 @@
 
 	function handleResize() {
 		clearTimeout(resizeTimer);
+		clearGame();
 
 		resizeTimer = setTimeout(() => {
-			const html = document.documentElement;
-			const body = document.body;
-
-			screenWidth = Math.max(
-				body.scrollWidth,
-				body.offsetWidth,
-				html.clientWidth,
-				html.scrollWidth,
-				html.offsetWidth
-			);
-			screenHeight = Math.max(
-				body.scrollHeight,
-				body.offsetHeight,
-				html.clientHeight,
-				html.scrollHeight,
-				html.offsetHeight
-			);
-			pixelRatio = window.devicePixelRatio;
+			screenWidth = window.innerWidth;
+			screenHeight = window.innerHeight;
 
 			columns = Math.round(screenWidth / resolution);
 			rows = Math.round(screenHeight / resolution);
@@ -46,11 +30,15 @@
 		}, 300);
 	}
 
-	function handleGameInit() {
-		context.clearRect(0, 0, screenWidth, screenHeight);
+	function clearGame() {
+		canvas.style.opacity = "0";
 		clearTimeout(transitionId);
 		clearInterval(gameIntervalId);
-		canvas.style.opacity = "0";
+	}
+
+	function handleGameInit() {
+		clearGame();
+		context.clearRect(0, 0, screenWidth, screenHeight);
 
 		if (currentAnimationHandle) {
 			cancelAnimationFrame(currentAnimationHandle);
@@ -164,8 +152,8 @@
 <svelte:window on:resize={handleResize} on:mousemove|trusted={handleMouseMove} />
 <canvas
 	bind:this={canvas}
-	width={screenWidth * pixelRatio}
-	height={screenHeight * pixelRatio}
+	width={screenWidth}
+	height={screenHeight}
 	class="absolute opacity-100 pointer-events-none right-0 top-0"
 	style="transition: opacity 1.2s ease 0s"
 />

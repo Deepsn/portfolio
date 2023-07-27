@@ -14,7 +14,7 @@
 	}
 	:global(body),
 	:global(html) {
-		width: 100%;
+		overflow: hidden;
 		min-height: 100vh;
 	}
 	:global(*) {
