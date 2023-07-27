@@ -95,7 +95,7 @@
 		for (let col = 0; col < gameGrid.length; col++) {
 			for (let row = 0; row < gameGrid[col].length; row++) {
 				const cell = gameGrid[col][row];
-				let color = "black";
+				let color = "rgba(0, 0, 0, 0)";
 
 				switch (cell) {
 					case 1:
