@@ -13,17 +13,37 @@
 	let gameIntervalId: number;
 	let transitionId: number;
 	let currentAnimationHandle: number;
+	let resizeTimer: number;
 	let gameGrid: Array<Array<number>>;
 
 	function handleResize() {
-		screenWidth = window.innerWidth;
-		screenHeight = window.innerHeight;
-		pixelRatio = window.devicePixelRatio;
+		clearTimeout(resizeTimer);
 
-		columns = Math.round(screenWidth / resolution);
-		rows = Math.round(screenHeight / resolution);
+		resizeTimer = setTimeout(() => {
+			const html = document.documentElement;
+			const body = document.body;
 
-		handleGameInit();
+			screenWidth = Math.max(
+				body.scrollWidth,
+				body.offsetWidth,
+				html.clientWidth,
+				html.scrollWidth,
+				html.offsetWidth
+			);
+			screenHeight = Math.max(
+				body.scrollHeight,
+				body.offsetHeight,
+				html.clientHeight,
+				html.scrollHeight,
+				html.offsetHeight
+			);
+			pixelRatio = window.devicePixelRatio;
+
+			columns = Math.round(screenWidth / resolution);
+			rows = Math.round(screenHeight / resolution);
+
+			handleGameInit();
+		}, 300);
 	}
 
 	function handleGameInit() {
@@ -41,6 +61,10 @@
 			.map(() => new Array(rows).fill(null).map(() => (Math.random() < 0.1 ? 1 : 0)));
 
 		transitionId = setTimeout(() => {
+			if (!canvas) {
+				return;
+			}
+
 			canvas.style.opacity = "1";
 		}, 500);
 
