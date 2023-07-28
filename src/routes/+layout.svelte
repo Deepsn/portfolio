@@ -9,13 +9,18 @@
 <slot />
 
 <style lang="postcss">
+	:global(i) {
+		pointer-events: none;
+		user-select: none;
+	}
 	:global(body) {
 		background-color: theme(colors.neutral.950);
 	}
 	:global(body),
 	:global(html) {
 		overflow: hidden;
-		min-height: 100vh;
+		width: 100%;
+		height: 100%;
 	}
 	:global(*) {
 		color: white;
