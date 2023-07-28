@@ -1,10 +1,8 @@
 <script lang="ts">
 	export let iconName: string;
 	let enabled = false;
-	let popupX: number;
 
-	function handleMouseEnter({ x }: MouseEvent) {
-		popupX = x;
+	function handleMouseEnter() {
 		enabled = true;
 	}
 
@@ -13,13 +11,14 @@
 	}
 </script>
 
-<div aria-hidden on:mouseenter={handleMouseEnter} on:mouseleave={handleMouseLeave}>
+<div class="h-[16px]" aria-hidden on:mouseenter={handleMouseEnter} on:mouseleave={handleMouseLeave}>
 	<slot />
 </div>
 
 <div
-	style="transform: translate({popupX}px, -35px);"
-	class="{enabled ? 'inline' : 'hidden'} absolute left-0 bg-neutral-800 p-1 rounded-full"
+	class="{enabled
+		? 'bg-neutral-800'
+		: 'bg-transparent'} absolute inline transition-all translate-y-[-45px] p-1 rounded-full"
 >
-	<p>{iconName}</p>
+	<p class="{enabled ? '' : 'text-transparent'} transition-all">{iconName}</p>
 </div>
