@@ -20,5 +20,5 @@
 		? 'bg-neutral-800'
 		: 'bg-transparent'} absolute inline transition-all translate-y-[-45px] p-1 rounded-full"
 >
-	<p class="{enabled ? '' : 'text-transparent'} transition-all">{iconName}</p>
+	<p class="{enabled ? '' : 'text-transparent'} select-none transition-all">{iconName}</p>
 </div>

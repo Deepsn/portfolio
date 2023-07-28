@@ -38,7 +38,9 @@
 				</Popup>
 			{/each}
 			<Popup iconName="currently learning">
-				<i class="flex justify-center material-symbols-outlined">add</i>
+				<i class="flex justify-center material-symbols-outlined pointer-events-none select-none"
+					>add</i
+				>
 			</Popup>
 		</div>
 	</div>
