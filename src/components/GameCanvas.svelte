@@ -2,11 +2,12 @@
 	import { onMount } from "svelte";
 
 	const fps = 8;
+	const baseResolution = 10;
 	let canvas: HTMLCanvasElement;
 	let context: CanvasRenderingContext2D;
 	let screenWidth = 0;
 	let screenHeight = 0;
-	let resolution = 10;
+	let resolution = 0;
 	let columns = 0;
 	let rows = 0;
 	let gameIntervalId: number;
@@ -22,6 +23,12 @@
 		resizeTimer = setTimeout(() => {
 			screenWidth = window.innerWidth;
 			screenHeight = window.innerHeight;
+
+			const scaleX = screenWidth / 800;
+			const scaleY = screenHeight / 600;
+			const scale = Math.max(scaleX, scaleY);
+
+			resolution = baseResolution * (1 / window.devicePixelRatio) * scale;
 
 			columns = Math.round(screenWidth / resolution);
 			rows = Math.round(screenHeight / resolution);
