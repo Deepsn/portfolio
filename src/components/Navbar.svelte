@@ -14,7 +14,10 @@
 				<i class="devicon-svelte-plain" />
 			</a>
 		</p>
-		<i id="made-with-simple" class="hidden devicon-svelte-plain" />
+
+		<a id="made-with-simple" class="hidden" href="https://svelte.dev">
+			<i class="devicon-svelte-plain" />
+		</a>
 	</ul>
 </nav>
 
