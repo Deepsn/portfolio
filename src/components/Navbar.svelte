@@ -1,9 +1,49 @@
+<script lang="ts">
+	import { onMount } from "svelte";
+
+	let menuButton: HTMLButtonElement;
+	let sideNav: HTMLDivElement;
+	let links = ["/", "/random", "/about"];
+
+	onMount(() => {
+		const menuButtonClick = () => {
+			sideNav.style.transform = "translate(0, 0)";
+			addEventListener("mouseup", mouseUp);
+		};
+		const mouseUp = () => {
+			if (!sideNav?.matches(":hover")) {
+				sideNav.style.transform = "translate(-100%, 0)";
+				removeEventListener("mouseup", mouseUp);
+			}
+		};
+
+		menuButton.addEventListener("click", menuButtonClick);
+
+		return () => {
+			removeEventListener("mouseup", mouseUp);
+			menuButton?.removeEventListener("click", menuButtonClick);
+		};
+	});
+</script>
+
+<div
+	bind:this={sideNav}
+	style="transform: translate(-100%, 0);"
+	class="transition-all fixed flex flex-col z-10 h-full w-1/3 p-3 bg-neutral-800 rounded-r-2xl"
+>
+	{#each links as link}
+		<a href={link}>~{link}</a>
+	{/each}
+</div>
+
 <nav class="flex w-full my-7 justify-between">
 	<ul class="flex w-[45%] justify-evenly items-center">
-		<i id="menu" class="hidden material-symbols-outlined">menu</i>
-		<a href="/">~/</a>
-		<a href="/random">~/random</a>
-		<a href="/about">~/about</a>
+		<button bind:this={menuButton} id="menu" class="hidden"
+			><i class="material-symbols-outlined">menu</i></button
+		>
+		{#each links as link}
+			<a href={link}>~{link}</a>
+		{/each}
 	</ul>
 
 	<ul class="flex w-[45%] justify-evenly items-center">
