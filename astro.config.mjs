@@ -1,9 +1,22 @@
 // @ts-check
 
 import solidJs from "@astrojs/solid-js";
-import { defineConfig } from "astro/config";
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig, fontProviders } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
 	integrations: [solidJs({ devtools: true })],
+
+	vite: {
+		plugins: [tailwindcss()],
+	},
+
+	fonts: [
+		{
+			provider: fontProviders.fontsource(),
+			name: "Roboto",
+			cssVariable: "--font-roboto",
+		},
+	],
 });
