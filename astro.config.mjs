@@ -15,8 +15,10 @@ export default defineConfig({
 	fonts: [
 		{
 			provider: fontProviders.fontsource(),
-			name: "Roboto",
-			cssVariable: "--font-roboto",
+			name: "Inter",
+			cssVariable: "--font-inter",
+			weights: [700],
+			fallbacks: ["system-ui", "sans-serif"],
 		},
 	],
 });
