@@ -208,6 +208,7 @@ export function LangtonAnt() {
 	return (
 		<div class="opacity-20 fixed inset-0 -z-10 overflow-hidden" ref={containerRef}>
 			<canvas aria-label="Langton's ant simulation" class="block" ref={canvasRef} role="img" />
+			<p class="text-white bottom-0 left-0 absolute">langton's ant + game of life</p>
 		</div>
 	);
 }
