@@ -4,8 +4,8 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
-	<div class="w-full flex-1 min-h-0 flex items-center justify-center text-white">
-		<div class="flex flex-col gap-16">
+	<div class="w-full flex-1 flex px-6 pb-10 sm:px-10 text-white">
+		<div class="m-auto w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10 md:gap-y-14">
 			<ProjectCard
 				description="charm devtools for debugging and inspecting charm states"
 				links={[{ label: "github", href: "https://github.com/Deepsn/charm-devtools" }]}
