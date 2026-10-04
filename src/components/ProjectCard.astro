@@ -1,0 +1,29 @@
+---
+interface Props {
+	title: string;
+	description: string;
+	tags?: string[];
+	links?: { label: string; href: string }[];
+}
+
+const { title, description, tags = [], links = [] } = Astro.props;
+---
+
+<article class="flex flex-col gap-0.5 text-xl text-white">
+	<h2 class="text-3xl leading-tight">{title}</h2>
+	<p>{description}</p>
+
+	{tags.length > 0 && <p class="mt-4 text-neutral-400">{tags.join(" / ")}</p>}
+
+	{
+		links.length > 0 && (
+			<div class="flex gap-3 pl-28">
+				{links.map((link) => (
+					<a href={link.href} rel="noreferrer" target="_blank">
+						{link.label}
+					</a>
+				))}
+			</div>
+		)
+	}
+</article>

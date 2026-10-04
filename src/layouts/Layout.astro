@@ -2,6 +2,7 @@
 import { Font } from "astro:assets";
 import "../styles/global.css";
 import Header from "../components/Header.astro";
+import { LangtonAnt } from "../components/LangtonAnt";
 import Welcome from "../components/Welcome.astro";
 ---
 
@@ -20,5 +21,6 @@ import Welcome from "../components/Welcome.astro";
 	<body class="bg-neutral-900 flex flex-col">
 		<Header />
 		<slot />
+		<LangtonAnt client:load />
 	</body>
 </html>
