@@ -1,0 +1,26 @@
+---
+import Section from "@/components/ui/Section.astro";
+
+const beganYear = 2018;
+const experience = `${new Date().getFullYear() - beganYear} years`;
+---
+
+<Section id="about" title="about me">
+	<div class="max-w-2xl space-y-4 text-lg leading-relaxed text-muted-foreground">
+		<p>
+			my name is <span class="text-foreground">Nicolas</span>, and i currently work as a software engineer and game
+			developer, mostly focused on Roblox, but always learning something new.
+		</p>
+		<p>i have <span class="text-foreground">{experience}</span> of experience in the field, since {beganYear}.</p>
+		<p>
+			currently studying Computer Science at
+			<a
+				class="text-foreground underline underline-offset-4 hover:text-primary"
+				href="https://www.cruzeirodosul.edu.br/"
+				rel="noreferrer"
+				target="_blank"
+				>Cruzeiro do Sul University</a
+			>, expected to graduate by the end of 2026.
+		</p>
+	</div>
+</Section>

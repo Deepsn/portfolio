@@ -1,0 +1,60 @@
+---
+import HiGif from "@/assets/hi.gif";
+import DownArrow from "@/assets/icons/down-arrow.svg";
+import PopupArrow from "@/assets/icons/popup-arrow.svg";
+import { beganYear, experienceYears } from "@/data/about";
+import { socials } from "@/data/site";
+import { button } from "@/styles/variants/button";
+import { link } from "@/styles/variants/link";
+---
+
+<section class="max-w-2xl">
+	<h1 class="mt-5 text-4xl font-semibold tracking-tight sm:text-5xl">
+		Hi! I'm Nicolas{" "}
+
+		<span class="inline-block">
+			<img alt="waving gif" src={HiGif.src} width="60px">
+		</span>
+	</h1>
+
+	<!-- <div aria-hidden="true" class="cell-rule mt-6"></div> -->
+
+	<div class="mt-8 space-y-4 leading-relaxed text-muted-foreground">
+		<p>
+			I currently work as a Software Engineer and Game Developer, mostly focused on{" "}
+			<span class="text-foreground">Roblox</span>, but always practicing something new.
+		</p>
+
+		<p>
+			I have been in the field since {beganYear}, with{" "}
+			<span class="text-foreground">{experienceYears}</span>{" "}
+			years of experience. I'm currently pursuing a degree in Computer Science at{" "}
+
+			<a
+				href="https://www.cruzeirodosul.edu.br/"
+				rel="noreferrer"
+				target="_blank"
+				class:list={[link(), "text-foreground hover:text-primary"]}
+			>
+				Cruzeiro do Sul University</a
+			>
+
+			, with an expected graduation in 2026.
+		</p>
+	</div>
+
+	<div class="mt-8 flex flex-wrap gap-3">
+		<a href="#projects" class:list={[link(), button(), "bg-primary text-primary-foreground hover:bg-primary/90"]}>
+			projects <DownArrow />
+		</a>
+
+		<a
+			href={socials.github}
+			rel="noreferrer"
+			target="_blank"
+			class:list={[button(), "border border-border text-foreground hover:border-primary hover:text-primary"]}
+		>
+			github <PopupArrow />
+		</a>
+	</div>
+</section>

@@ -1,0 +1,20 @@
+---
+import ProjectCard from "@/components/layout/ProjectCard.astro";
+import Section from "@/components/ui/Section.astro";
+import { projects } from "@/data/projects";
+
+interface Props {
+	visible?: number;
+}
+
+const { visible: projectsSize } = Astro.props;
+const visibleProjects = projectsSize && projectsSize > 0 ? projects.slice(0, projectsSize) : projects;
+---
+
+<Section id="projects" title="Projects that I worked on">
+	<ol class="border-t border-border">
+		{visibleProjects.map((project) => <ProjectCard {...project} />)}
+	</ol>
+
+	<slot />
+</Section>
