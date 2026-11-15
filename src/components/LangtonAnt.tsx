@@ -1,29 +1,40 @@
 import { onCleanup, onMount } from "solid-js";
+import AntIcon from "@/assets/icons/ant.svg?component-solid";
 
-const CELL_SIZE = 4;
+const CELL_SIZE = 12;
+const CELL_GAP = 3;
 const MAX_PIXEL_RATIO = 2;
-const STEPS_PER_SECOND = 2000;
-const MAX_STEPS_PER_FRAME = 500;
-const LIFE_GENERATIONS_PER_SECOND = 8;
+const ANT_COUNT = 3;
+const STEPS_PER_SECOND = 40;
+const MAX_STEPS_PER_FRAME = 10;
+const LIFE_GENERATIONS_PER_SECOND = 4;
 const MAX_FRAME_DELTA_MS = 100;
 
-const COLORS = {
-	empty: "#000000",
-	filled: "#facc15",
-	ant: "#f8fafc",
-};
+const EMPTY = 0;
+const LIFE = 1;
+const TRAIL = 2;
+
+const BACKGROUND = "#101216";
+const CELL_COLORS = [BACKGROUND, "#2f3f8f", "#c9a227"];
+const ANT_COLOR = "#ecebe6";
 
 const DX = [0, 1, 0, -1];
 const DY = [-1, 0, 1, 0];
+
+interface Ant {
+	x: number;
+	y: number;
+	direction: number;
+}
 
 interface Simulation {
 	cols: number;
 	rows: number;
 	cells: Uint8Array;
-	antX: number;
-	antY: number;
-	direction: number;
+	ants: Ant[];
 }
+
+const wrap = (value: number, size: number) => ((value % size) + size) % size;
 
 export function LangtonAnt() {
 	let containerRef!: HTMLDivElement;
@@ -33,9 +44,10 @@ export function LangtonAnt() {
 		const context = canvasRef.getContext("2d", { alpha: false });
 		if (!context) return;
 
-		let sim: Simulation = { cols: 0, rows: 0, cells: new Uint8Array(0), antX: 0, antY: 0, direction: 0 };
+		let sim: Simulation = { cols: 0, rows: 0, cells: new Uint8Array(0), ants: [] };
 		let pixelRatio = 1;
 		let cellPx = CELL_SIZE;
+		let gapPx = CELL_GAP;
 		let animationFrame = 0;
 		let lastTime = 0;
 		let stepBudget = 0;
@@ -43,28 +55,33 @@ export function LangtonAnt() {
 		let spareCells = new Uint8Array(0);
 
 		const paintCell = (x: number, y: number, color: string) => {
-			context.fillStyle = color;
+			context.fillStyle = BACKGROUND;
 			context.fillRect(x * cellPx, y * cellPx, cellPx, cellPx);
+			if (color === BACKGROUND) return;
+
+			context.fillStyle = color;
+			context.fillRect(x * cellPx + gapPx / 2, y * cellPx + gapPx / 2, cellPx - gapPx, cellPx - gapPx);
 		};
 
 		const paintCellFromState = (x: number, y: number) => {
-			paintCell(x, y, sim.cells[y * sim.cols + x] === 1 ? COLORS.filled : COLORS.empty);
+			paintCell(x, y, CELL_COLORS[sim.cells[y * sim.cols + x]]);
+		};
+
+		const paintAnts = () => {
+			for (const ant of sim.ants) paintCell(ant.x, ant.y, ANT_COLOR);
 		};
 
 		const paintAll = () => {
-			context.fillStyle = COLORS.empty;
+			context.fillStyle = BACKGROUND;
 			context.fillRect(0, 0, canvasRef.width, canvasRef.height);
 
-			context.fillStyle = COLORS.filled;
 			for (let y = 0; y < sim.rows; y += 1) {
 				for (let x = 0; x < sim.cols; x += 1) {
-					if (sim.cells[y * sim.cols + x] === 1) {
-						context.fillRect(x * cellPx, y * cellPx, cellPx, cellPx);
-					}
+					if (sim.cells[y * sim.cols + x] !== EMPTY) paintCellFromState(x, y);
 				}
 			}
 
-			paintCell(sim.antX, sim.antY, COLORS.ant);
+			paintAnts();
 		};
 
 		const layout = () => {
@@ -75,11 +92,10 @@ export function LangtonAnt() {
 
 			if (cols === sim.cols && rows === sim.rows && nextCellPx === cellPx) return;
 			cellPx = nextCellPx;
+			gapPx = Math.round(CELL_GAP * pixelRatio);
 
 			const cells = new Uint8Array(cols * rows);
-			let antX = Math.floor(cols / 2);
-			let antY = Math.floor(rows / 2);
-			let direction = sim.direction;
+			let ants: Ant[];
 
 			if (sim.cols > 0) {
 				const offsetX = Math.floor((cols - sim.cols) / 2);
@@ -95,17 +111,20 @@ export function LangtonAnt() {
 					}
 				}
 
-				const movedX = sim.antX + offsetX;
-				const movedY = sim.antY + offsetY;
-				if (movedX >= 0 && movedX < cols && movedY >= 0 && movedY < rows) {
-					antX = movedX;
-					antY = movedY;
-				}
+				ants = sim.ants.map((ant) => ({
+					x: wrap(ant.x + offsetX, cols),
+					y: wrap(ant.y + offsetY, rows),
+					direction: ant.direction,
+				}));
 			} else {
-				direction = 0;
+				ants = Array.from({ length: ANT_COUNT }, () => ({
+					x: Math.floor(Math.random() * cols),
+					y: Math.floor(Math.random() * rows),
+					direction: Math.floor(Math.random() * 4),
+				}));
 			}
 
-			sim = { cols, rows, cells, antX, antY, direction };
+			sim = { cols, rows, cells, ants };
 			spareCells = new Uint8Array(cols * rows);
 
 			canvasRef.width = cols * cellPx;
@@ -118,23 +137,20 @@ export function LangtonAnt() {
 
 		const advance = (steps: number) => {
 			const { cols, rows, cells } = sim;
-			let { antX, antY, direction } = sim;
 
-			for (let i = 0; i < steps; i += 1) {
-				const index = antY * cols + antX;
-				const isFilled = cells[index] === 1;
+			for (const ant of sim.ants) {
+				for (let i = 0; i < steps; i += 1) {
+					const index = ant.y * cols + ant.x;
+					const isFilled = cells[index] !== EMPTY;
 
-				direction = (direction + (isFilled ? 1 : 3)) & 3;
-				cells[index] = isFilled ? 0 : 1;
-				paintCell(antX, antY, isFilled ? COLORS.empty : COLORS.filled);
+					ant.direction = (ant.direction + (isFilled ? 1 : 3)) & 3;
+					cells[index] = isFilled ? EMPTY : TRAIL;
+					paintCellFromState(ant.x, ant.y);
 
-				antX = (antX + DX[direction] + cols) % cols;
-				antY = (antY + DY[direction] + rows) % rows;
+					ant.x = wrap(ant.x + DX[ant.direction], cols);
+					ant.y = wrap(ant.y + DY[ant.direction], rows);
+				}
 			}
-
-			sim.antX = antX;
-			sim.antY = antY;
-			sim.direction = direction;
 		};
 
 		const generate = () => {
@@ -150,19 +166,20 @@ export function LangtonAnt() {
 					const left = x === 0 ? cols - 1 : x - 1;
 					const right = x === cols - 1 ? 0 : x + 1;
 					const neighbors =
-						cells[up + left] +
-						cells[up + x] +
-						cells[up + right] +
-						cells[row + left] +
-						cells[row + right] +
-						cells[down + left] +
-						cells[down + x] +
-						cells[down + right];
+						Number(cells[up + left] !== EMPTY) +
+						Number(cells[up + x] !== EMPTY) +
+						Number(cells[up + right] !== EMPTY) +
+						Number(cells[row + left] !== EMPTY) +
+						Number(cells[row + right] !== EMPTY) +
+						Number(cells[down + left] !== EMPTY) +
+						Number(cells[down + x] !== EMPTY) +
+						Number(cells[down + right] !== EMPTY);
 
-					const wasAlive = cells[row + x];
-					const isAlive = neighbors === 3 || (wasAlive === 1 && neighbors === 2) ? 1 : 0;
-					next[row + x] = isAlive;
-					if (isAlive !== wasAlive) paintCell(x, y, isAlive === 1 ? COLORS.filled : COLORS.empty);
+					const previous = cells[row + x];
+					const isAlive = neighbors === 3 || (previous !== EMPTY && neighbors === 2);
+					const state = isAlive ? LIFE : EMPTY;
+					next[row + x] = state;
+					if (state !== previous) paintCell(x, y, CELL_COLORS[state]);
 				}
 			}
 
@@ -185,10 +202,10 @@ export function LangtonAnt() {
 			if (runLife) lifeBudget = Math.min(lifeBudget - 1, 1);
 			if (steps === 0 && !runLife) return;
 
-			paintCellFromState(sim.antX, sim.antY);
+			for (const ant of sim.ants) paintCellFromState(ant.x, ant.y);
 			advance(steps);
 			if (runLife) generate();
-			paintCell(sim.antX, sim.antY, COLORS.ant);
+			paintAnts();
 		};
 
 		layout();
@@ -206,9 +223,14 @@ export function LangtonAnt() {
 	});
 
 	return (
-		<div class="opacity-20 fixed inset-0 -z-10 overflow-hidden" ref={containerRef}>
-			<canvas aria-label="Langton's ant simulation" class="block" ref={canvasRef} role="img" />
-			<p class="text-white bottom-0 left-0 absolute">langton's ant + game of life</p>
+		<div class="pointer-events-none fixed inset-0 z-[-1] overflow-hidden">
+			<div class="absolute inset-0 mask-[linear-gradient(to_right,rgb(0_0_0/0.25),black_65%)]" ref={containerRef}>
+				<canvas aria-label="Langton's ant simulation" class="block" ref={canvasRef} role="img" />
+			</div>
+			<p class="absolute right-6 bottom-6 flex items-center gap-2 rounded-full border border-border bg-background/80 px-3 py-1.5 font-mono text-xs text-muted-foreground backdrop-blur">
+				<AntIcon />
+				langton's ant + life
+			</p>
 		</div>
 	);
 }
