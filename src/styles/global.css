@@ -1,14 +1,127 @@
 @import "tailwindcss";
+@import "tw-animate-css";
 
-html,
-body {
-	margin: 0;
-	width: 100%;
-	height: 100%;
-	font-family: var(--font-inter);
-	font-weight: 700;
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+	--font-sans: var(--font-geist);
+	--font-mono: var(--font-geist-mono);
+	--color-ring: var(--ring);
+	--color-input: var(--input);
+	--color-border: var(--border);
+	--color-destructive: var(--destructive);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-accent: var(--accent);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-muted: var(--muted);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-secondary: var(--secondary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-primary: var(--primary);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-popover: var(--popover);
+	--color-card-foreground: var(--card-foreground);
+	--color-card: var(--card);
+	--color-foreground: var(--foreground);
+	--color-background: var(--background);
+	--radius-sm: calc(var(--radius) * 0.6);
+	--radius-md: calc(var(--radius) * 0.8);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) * 1.4);
 }
 
-a {
-	text-decoration-line: underline;
+:root {
+	color-scheme: dark;
+	--background: #101216;
+	--foreground: #ecebe6;
+	--card: #15181d;
+	--card-foreground: #ecebe6;
+	--popover: #15181d;
+	--popover-foreground: #ecebe6;
+	--primary: #f2c230;
+	--primary-foreground: #101216;
+	--secondary: #1d2128;
+	--secondary-foreground: #ecebe6;
+	--muted: #1d2128;
+	--muted-foreground: #8d929c;
+	--accent: #5b7cfa;
+	--accent-foreground: #ecebe6;
+	--destructive: #e5534b;
+	--border: #262a32;
+	--input: #262a32;
+	--ring: #f2c230;
+	--radius: 0.5rem;
+}
+
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
+	body {
+		@apply bg-background font-sans text-foreground antialiased;
+	}
+}
+
+@theme {
+	--animate-wave: wave 2s ease-in-out 1;
+	--animate-blink: blink 1.1s steps(1) infinite;
+}
+
+@layer components {
+	/* Panel with a yellow 7px "cell" on each corner, echoing the ant grid. */
+	.frame {
+		position: relative;
+		border: 1px solid var(--border);
+		background-color: color-mix(in oklab, var(--background) 90%, transparent);
+		backdrop-filter: blur(6px);
+	}
+	.frame::before {
+		--cell: linear-gradient(var(--primary), var(--primary));
+		content: "";
+		position: absolute;
+		inset: -4px;
+		pointer-events: none;
+		background:
+			var(--cell) top left / 7px 7px no-repeat,
+			var(--cell) top right / 7px 7px no-repeat,
+			var(--cell) bottom left / 7px 7px no-repeat,
+			var(--cell) bottom right / 7px 7px no-repeat;
+	}
+
+	/* Row of 9px cells on a 12px pitch, same as the simulation; first five are lit. */
+	.cell-rule {
+		height: 9px;
+		background: linear-gradient(to right, var(--primary) 0 57px, var(--border) 57px);
+		mask: repeating-linear-gradient(to right, #000 0 9px, transparent 9px 12px);
+	}
+}
+
+@keyframes blink {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0;
+	}
+}
+
+@keyframes wave {
+	0%,
+	100% {
+		transform: rotate(0deg);
+	}
+	10%,
+	30%,
+	50%,
+	70%,
+	90% {
+		transform: rotate(14deg);
+	}
+	20%,
+	40%,
+	60%,
+	80% {
+		transform: rotate(-8deg);
+	}
 }
