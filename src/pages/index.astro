@@ -1,8 +1,45 @@
 ---
-import Welcome from "../components/Welcome.astro";
-import Layout from "../layouts/Layout.astro";
+import PopupArrow from "@/assets/icons/popup-arrow.svg";
+import Career from "@/components/sections/Career.astro";
+import Contact from "@/components/sections/Contact.astro";
+import Projects from "@/components/sections/Projects.astro";
+import Welcome from "@/components/sections/Welcome.astro";
+import Layout from "@/layouts/Layout.astro";
+
+const screen = "relative z-10 mx-auto flex min-h-[calc(100dvh-4rem)] w-full max-w-6xl items-center px-4 py-20 sm:px-6";
+const panel = "frame w-full";
 ---
 
 <Layout>
-	<Welcome />
+	<div class={screen}>
+		<div class="w-full">
+			<Welcome />
+		</div>
+	</div>
+
+	<div class={screen}>
+		<div class={panel}>
+			<Projects visible={4}>
+				<a
+					class="group mt-10 inline-flex items-center gap-2 font-mono text-sm text-muted-foreground transition-colors hover:text-primary"
+					href="/projects"
+				>
+					See all projects
+					<PopupArrow />
+				</a>
+			</Projects>
+		</div>
+	</div>
+
+	<div class={screen}>
+		<div class={panel}>
+			<Career />
+		</div>
+	</div>
+
+	<div class={screen}>
+		<div class={panel}>
+			<Contact />
+		</div>
+	</div>
 </Layout>

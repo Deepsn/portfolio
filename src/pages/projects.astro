@@ -1,59 +1,8 @@
 ---
-import ProjectCard from "../components/ProjectCard.astro";
-import Layout from "../layouts/Layout.astro";
+import Projects from "@/components/sections/Projects.astro";
+import Layout from "@/layouts/Layout.astro";
 ---
 
 <Layout>
-	<div class="w-full flex-1 flex px-6 pb-10 sm:px-10 text-white">
-		<div class="m-auto w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-14 md:gap-y-20">
-			<ProjectCard
-				description="charm devtools for debugging and inspecting charm states"
-				links={[{ label: "github", href: "https://github.com/Deepsn/charm-devtools" }]}
-				tags={["typescript", "roblox", "charm"]}
-				title="Charm devtools"
-			/>
-			<ProjectCard
-				description="roblox sourcemap downloader"
-				links={[
-                    { label: "github", href: "https://github.com/Deepsn/roblox_sourcemap_downloader" },
-                    { label: "sourcemap", href: "https://github.com/Deepsn/roblox_sourcemap" }
-                ]}
-				tags={["typescript", "crawler", "sourcemap"]}
-				title="Roblox Sourcemap Downloader"
-			/>
-			<ProjectCard
-				description="Chrome/Firefox extension that adds more features to the roblox website"
-				links={[{ label: "github", href: "https://github.com/Deepsn/roblox_extra" }]}
-				tags={["typescript", "roblox", "browser extension", "wxt", "rust"]}
-				title="Roblox Extra"
-			/>
-			<ProjectCard
-				description="Raycast wrapper built with roblox-ts"
-				links={[
-                    { label: "github", href: "https://github.com/Deepsn/rbxts-tracer" },
-                    { label: "npm", href: "https://npmjs.com/package/@rbxts/tracer" }
-                ]}
-				tags={["typescript", "roblox", "roblox-ts", "library"]}
-				title="rbxts-tracer"
-			/>
-			<ProjectCard
-				description="tauri app that shows a list of activities from Cruzeiro do Sul blackboard"
-				links={[{ label: "github", href: "https://github.com/bb-work-org/bb-work" }]}
-				tags={["typescript", "rust", "tauri"]}
-				title="BlackBoard Work"
-			/>
-			<ProjectCard
-				description="open source roblox-ts anime game"
-				links={[{ label: "github", href: "https://github.com/JamDevHead/anime-infinity-x" }]}
-				tags={["typescript", "roblox", "roblox-ts", "flamework"]}
-				title="Anime Infinity X"
-			/>
-			<ProjectCard
-				description="college project of a supermarket website"
-				links={[{ label: "github", href: "https://github.com/Deepsn/vemkac-project" }]}
-				tags={["javascript"]}
-				title="Vemkac Project"
-			/>
-		</div>
-	</div>
+	<Projects />
 </Layout>
