@@ -1,0 +1,11 @@
+---
+import CareerCard from "@/components/layout/CareerCard.astro";
+import Section from "@/components/ui/Section.astro";
+import { academic } from "@/data/academic";
+---
+
+<Section id="academic" title="Academic">
+	<ol class="border-t border-border">
+		{academic.map((entry) => <CareerCard {...entry} />)}
+	</ol>
+</Section>
