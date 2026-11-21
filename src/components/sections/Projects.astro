@@ -8,7 +8,10 @@ interface Props {
 }
 
 const { visible: projectsSize } = Astro.props;
-const visibleProjects = projectsSize && projectsSize > 0 ? projects.slice(0, projectsSize) : projects;
+const visibleProjects =
+	projectsSize && projectsSize > 0
+		? projects.slice(0, projectsSize)
+		: projects;
 ---
 
 <Section id="projects" title="Projects that I worked on">

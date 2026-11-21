@@ -87,13 +87,6 @@
 			var(--cell) bottom left / 7px 7px no-repeat,
 			var(--cell) bottom right / 7px 7px no-repeat;
 	}
-
-	/* Row of 9px cells on a 12px pitch, same as the simulation; first five are lit. */
-	.cell-rule {
-		height: 9px;
-		background: linear-gradient(to right, var(--primary) 0 57px, var(--border) 57px);
-		mask: repeating-linear-gradient(to right, #000 0 9px, transparent 9px 12px);
-	}
 }
 
 @keyframes blink {

@@ -1,3 +1,5 @@
+import AxolutionsLogo from "@/assets/logos/axolutions.webp";
+import GalorysLogo from "@/assets/logos/galorys.png";
 import RobloxLogo from "@/assets/logos/roblox.webp";
 
 export interface Career {
@@ -19,6 +21,7 @@ export const career: Career[] = [
 			start: "2025",
 			current: true,
 		},
+		logo: GalorysLogo.src,
 		title: "Programmer / Game Developer",
 		employer: "Galorys",
 		responsibilities: ["Developed games on Roblox platform", "Resolving problems and implementing new features"],
@@ -39,9 +42,10 @@ export const career: Career[] = [
 	},
 	{
 		period: {
-			start: "2024",
+			start: "2023",
 			end: "2025",
 		},
+		logo: AxolutionsLogo.src,
 		employer: "Axolutions",
 		title: "Web Developer",
 		responsibilities: [
