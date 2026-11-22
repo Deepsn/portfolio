@@ -223,14 +223,22 @@ export function LangtonAnt() {
 	});
 
 	return (
-		<div class="pointer-events-none fixed inset-0 z-[-1] overflow-hidden">
-			<div class="absolute inset-0 mask-[linear-gradient(to_right,rgb(0_0_0/0.25),black_65%)]" ref={containerRef}>
-				<canvas aria-label="Langton's ant simulation" class="block" ref={canvasRef} role="img" />
+		<>
+			<div class="fixed inset-0 z-[-1] overflow-hidden">
+				<div class="absolute inset-0 mask-[linear-gradient(to_right,rgb(0_0_0/0.25),black_65%)]" ref={containerRef}>
+					<canvas class="block" ref={canvasRef} role="img" />
+				</div>
 			</div>
-			<p class="absolute right-6 bottom-6 flex items-center gap-2 rounded-full border border-border bg-background/80 px-3 py-1.5 font-mono text-xs text-muted-foreground backdrop-blur">
-				<AntIcon />
-				langton's ant + life
-			</p>
-		</div>
+
+			<div class="fixed group right-6 bottom-6 flex h-9 w-9 items-center gap-2 overflow-hidden rounded-full border border-border bg-background/80 px-2 backdrop-blur transition-all duration-300 ease-in-out hover:w-78">
+				<span class="flex h-4 w-4 shrink-0 items-center justify-center">
+					<AntIcon />
+				</span>
+
+				<span class="max-w-0 overflow-hidden whitespace-nowrap text-xs font-mono text-muted-foreground opacity-0 transition-all duration-300 group-hover:max-w-78 group-hover:opacity-100">
+					Langton's Ant + Conway's Game of Life
+				</span>
+			</div>
+		</>
 	);
 }
