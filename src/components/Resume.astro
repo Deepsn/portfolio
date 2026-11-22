@@ -1,0 +1,352 @@
+---
+import { beganYear, experienceYears, stack } from "@/data/about";
+import { academic } from "@/data/academic";
+import { type Career, career } from "@/data/career";
+import { projects } from "@/data/projects";
+import { socials } from "@/data/socials";
+
+const featuredProjects = projects
+	.filter((project) => project.type === "oss" || project.type === "game")
+	.slice(0, 5);
+
+const formatPeriod = ({ period }: Career) =>
+	[period.start, period.end ?? (period.current ? "Present" : undefined)]
+		.filter(Boolean)
+		.join(" – ");
+
+const contacts = Object.entries(socials).map(([label, href]) => ({
+	label,
+	href,
+	display:
+		new URL(href).hostname.replace(/^www\./, "") +
+		new URL(href).pathname.replace(/\/$/, ""),
+}));
+---
+
+<header class="mx-auto w-full max-w-6xl mb-12">
+	<h1
+		class="mt-2 text-4xl font-semibold tracking-tight text-balance sm:text-5xl"
+		id="about-title"
+	>
+		Resume
+	</h1>
+</header>
+
+<div class="resume-toolbar">
+	<button class="resume-download" type="button">download pdf</button>
+</div>
+
+<div class="resume-scroll">
+	<article class="resume-sheet" id="resume">
+		<header class="resume-header">
+			<div>
+				<h1>Nicolas Silva</h1>
+				<p class="resume-role">Software Engineer - Game Developer</p>
+			</div>
+			<ul class="resume-contacts">
+				{
+					contacts.map(({ label, href, display }) => (
+						<li>
+							<span>{label}</span>
+							<a href={href}>{display}</a>
+						</li>
+					))
+				}
+			</ul>
+		</header>
+
+		<section>
+			<h2>Summary</h2>
+			<p>
+				Software engineer and Game developer working in the field since {
+					beganYear
+				} ({experienceYears}
+				years), mostly focused on the Roblox platform with TypeScript (roblox-ts)
+				and Luau, and also experienced in web development with React and Next.js.
+				Currently pursuing a Computer Science degree.
+			</p>
+		</section>
+
+		<section>
+			<h2>Experience</h2>
+			{
+				career.map((entry) => (
+					<div class="resume-entry">
+						<div class="resume-entry-head">
+							<h3>
+								{entry.title}
+								{entry.employer && (
+									<span class="resume-employer">
+										{" "}
+										@ {entry.employer}
+									</span>
+								)}
+							</h3>
+							<span class="resume-period">
+								{formatPeriod(entry)}
+							</span>
+						</div>
+						{entry.responsibilities && (
+							<ul class="resume-list">
+								{entry.responsibilities.map((item) => (
+									<li>{item}</li>
+								))}
+							</ul>
+						)}
+					</div>
+				))
+			}
+		</section>
+
+		<section>
+			<h2>Education</h2>
+			{
+				academic.map((entry) => (
+					<div class="resume-entry">
+						<div class="resume-entry-head">
+							<h3>
+								{entry.title}
+								{entry.employer && (
+									<span class="resume-employer">
+										{" "}
+										- {entry.employer}
+									</span>
+								)}
+							</h3>
+							<span class="resume-period">
+								{formatPeriod(entry)}
+							</span>
+						</div>
+					</div>
+				))
+			}
+		</section>
+
+		<section>
+			<h2>Projects</h2>
+			{
+				featuredProjects.map((project) => (
+					<div class="resume-entry">
+						<div class="resume-entry-head">
+							<h3>{project.title}</h3>
+							{project.links[0] && (
+								<a
+									class="resume-period"
+									href={project.links[0].href}
+								>
+									{project.links[0].label}
+								</a>
+							)}
+						</div>
+						<p>{project.description}</p>
+					</div>
+				))
+			}
+		</section>
+
+		<section>
+			<h2>Skills</h2>
+			<p>{stack[0].items.map((item) => item.name).join(" - ")}</p>
+		</section>
+	</article>
+</div>
+
+<script>
+	const button = document.querySelector<HTMLButtonElement>(
+		"[data-resume-download]",
+	);
+	const sheet = document.getElementById("resume");
+
+	button?.addEventListener("click", async () => {
+		if (!sheet || button.disabled) return;
+
+		const label = button.querySelector("[data-label]");
+		const original = label?.textContent;
+		button.disabled = true;
+		if (label) label.textContent = "generating...";
+
+		try {
+			const { default: html2pdf } = await import("html2pdf.js");
+
+			await html2pdf()
+				.set({
+					margin: 0,
+					filename: "nicolas-resume.pdf",
+					image: { type: "jpeg", quality: 0.98 },
+					html2canvas: { scale: 2, useCORS: true },
+					jsPDF: {
+						unit: "mm",
+						format: "a4",
+						orientation: "portrait",
+					},
+					enableLinks: true,
+				})
+				.from(sheet)
+				.save();
+		} finally {
+			button.disabled = false;
+			if (label) label.textContent = original ?? "download pdf";
+		}
+	});
+</script>
+
+<style>
+	/* Styles used on html2pdf output */
+	.resume-toolbar {
+		display: flex;
+		justify-content: flex-end;
+		width: 100%;
+		max-width: 210mm;
+		margin-inline: auto;
+		margin-bottom: 1rem;
+	}
+
+	.resume-download {
+		display: inline-flex;
+		height: 2.5rem;
+		align-items: center;
+		padding-inline: 1rem;
+		font-family: var(--font-mono);
+		font-size: 0.875rem;
+		background: var(--primary);
+		color: var(--primary-foreground);
+		cursor: pointer;
+		transition: opacity 150ms;
+	}
+
+	.resume-download:hover {
+		opacity: 0.9;
+	}
+
+	.resume-download:disabled {
+		cursor: progress;
+		opacity: 0.6;
+	}
+
+	.resume-scroll {
+		width: 100%;
+		overflow-x: auto;
+	}
+
+	.resume-sheet {
+		box-sizing: border-box;
+		width: 210mm;
+		min-height: 297mm;
+		margin-inline: auto;
+		padding: 16mm 18mm;
+		background: #ffffff;
+		color: #1f2328;
+		font-family: var(--font-sans);
+		font-size: 10pt;
+		line-height: 1.45;
+	}
+
+	.resume-sheet a {
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.resume-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		gap: 2rem;
+		padding-bottom: 5mm;
+		border-bottom: 2px solid #1f2328;
+	}
+
+	.resume-header h1 {
+		font-size: 24pt;
+		font-weight: 600;
+		line-height: 1.1;
+		letter-spacing: -0.02em;
+		color: #101216;
+	}
+
+	.resume-role {
+		margin-top: 1mm;
+		font-size: 11pt;
+		color: #57606a;
+	}
+
+	.resume-contacts {
+		display: grid;
+		grid-template-columns: auto auto;
+		column-gap: 3mm;
+		font-family: var(--font-mono);
+		font-size: 8pt;
+		text-align: right;
+	}
+
+	.resume-contacts li {
+		display: contents;
+	}
+
+	.resume-contacts span {
+		color: #8c959f;
+	}
+
+	.resume-sheet section {
+		margin-top: 6mm;
+	}
+
+	.resume-sheet h2 {
+		margin-bottom: 2.5mm;
+		padding-bottom: 1mm;
+		border-bottom: 1px solid #d0d7de;
+		font-family: var(--font-mono);
+		font-size: 9pt;
+		font-weight: 400;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: #b08800;
+	}
+
+	.resume-entry {
+		break-inside: avoid;
+	}
+
+	.resume-entry + .resume-entry {
+		margin-top: 3.5mm;
+	}
+
+	.resume-entry-head {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 1rem;
+	}
+
+	.resume-entry h3 {
+		font-size: 10.5pt;
+		font-weight: 600;
+		color: #101216;
+	}
+
+	.resume-employer {
+		font-weight: 400;
+		color: #57606a;
+	}
+
+	.resume-period {
+		flex-shrink: 0;
+		font-family: var(--font-mono);
+		font-size: 8pt;
+		color: #8c959f;
+	}
+
+	.resume-entry p {
+		color: #424a53;
+	}
+
+	.resume-list {
+		margin-top: 1mm;
+		padding-left: 4mm;
+		list-style: disc;
+		color: #424a53;
+	}
+
+	.resume-list li + li {
+		margin-top: 0.5mm;
+	}
+</style>

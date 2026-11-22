@@ -7,11 +7,7 @@ interface Props {
 const { id, title } = Astro.props;
 ---
 
-<section
-	aria-labelledby={`${id}-title`}
-	class="scroll-mt-24 p-6 sm:p-10 lg:p-14"
-	id={id}
->
+<section class="scroll-mt-24 p-6 sm:p-10 lg:p-14" id={id}>
 	<header>
 		<h2
 			class="text-3xl font-semibold tracking-tight text-balance sm:text-4xl"
