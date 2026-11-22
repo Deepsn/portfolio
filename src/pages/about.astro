@@ -1,8 +1,91 @@
 ---
-import About from "@/components/sections/About.astro";
+import Badge from "@/components/layout/Badge.astro";
+import { beganYear, experienceYears, stack } from "@/data/about";
 import Layout from "@/layouts/Layout.astro";
+import { link } from "@/styles/variants/link";
 ---
 
 <Layout>
-	<About />
+	<section class="mx-auto w-full max-w-6xl scroll-mt-24 p-6 sm:p-10 lg:p-14">
+		<header class="max-w-2xl">
+			<h1
+				class="mt-2 text-4xl font-semibold tracking-tight text-balance sm:text-5xl"
+				id="about-title"
+			>
+				About me
+			</h1>
+		</header>
+
+		<div class="mt-12 grid gap-10 lg:grid-cols-[1fr_20rem] lg:gap-16">
+			<div
+				class="max-w-2xl space-y-5 text-lg leading-relaxed text-muted-foreground"
+			>
+				<p>
+					I'm Nicolas, a Software Engineer and Game Developer focused
+					primarily on the Roblox ecosystem. I enjoy building
+					software, exploring new technologies, and continuously
+					expanding my knowledge through personal projects and
+					experimentation. Currently exploring Godot, C#, and Java!
+				</p>
+				<p>
+					I've been programming since {beganYear}, accumulating over {
+						experienceYears
+					} of experience exploring different areas of Software Development,
+					from game development to general-purpose applications.
+				</p>
+				<p>
+					I'm currently pursuing a Bachelor's degree in Computer
+					Science at <a
+						href="https://www.cruzeirodosul.edu.br/"
+						rel="noreferrer"
+						target="_blank"
+						class:list={[
+							link(),
+							"text-foreground hover:text-primary",
+						]}
+					>
+						Cruzeiro do Sul University</a
+					>, with an expected graduation date of late 2026.
+				</p>
+			</div>
+		</div>
+
+		<section aria-labelledby="stack-title" class="mt-20">
+			<h2
+				class="text-2xl font-semibold tracking-tight sm:text-3xl"
+				id="stack-title"
+			>
+				Stack
+			</h2>
+			<p class="mt-2 text-muted-foreground">
+				Languages and tools I generally work with:
+			</p>
+
+			<div class="mt-8 grid gap-6 md:grid-cols-3">
+				{
+					stack.map((group) => (
+						<div class="frame p-5">
+							<h3 class="flex items-center gap-2 font-mono text-sm text-muted-foreground">
+								<span
+									aria-hidden="true"
+									class="size-1.5 bg-accent/70"
+								/>
+								{group.title}
+							</h3>
+							<ul class="mt-4 flex flex-wrap gap-2">
+								{group.items.map((item) => (
+									<li>
+										<Badge
+											link={item.link}
+											text={item.name}
+										/>
+									</li>
+								))}
+							</ul>
+						</div>
+					))
+				}
+			</div>
+		</section>
+	</section>
 </Layout>

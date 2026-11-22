@@ -1,0 +1,28 @@
+---
+import type { JSX } from "solid-js";
+
+interface Props {
+    text: string;
+    icon?: JSX.Element;
+    link?: string;
+    class?: string;
+}
+
+const { text, icon, link, class: className } = Astro.props;
+
+const Tag = link ? "a" : "span";
+---
+
+<Tag
+    href={link}
+    rel={link ? "noreferrer" : undefined}
+    target={link ? "_blank" : undefined}
+    class:list={[
+        className,
+        "inline-flex max-w-max items-center gap-1.5 rounded-sm border px-2.5 py-1 font-mono text-xs transition-colors border-border bg-secondary/60 text-foreground",
+        { "hover:border-primary hover:text-primary": Tag === "a" },
+    ]}
+>
+    {icon && <span class="mr-2">{icon}</span>}
+    {text}
+</Tag>
