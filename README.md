@@ -1,46 +1,23 @@
-# Astro Starter Kit: Basics
+# Portfolio
 
-```sh
-bun create astro@latest -- --template basics
-```
+My personal portfolio website: a short intro, career history, academic background, projects, contact links, and a resume you can print or export.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Built with [Astro](https://astro.build), [SolidJS](https://www.solidjs.com), and [Tailwind CSS](https://tailwindcss.com)
 
-## 🚀 Project Structure
+Features a [Langton's Ant](https://en.wikipedia.org/wiki/Langton%27s_ant) + [Conway's Game of life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) simulation in the background
 
-Inside of your Astro project, you'll see the following folders and files:
+## 🛠️ Tech Stack
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
-```
+| Area      | Tools                                         |
+| :-------- | :-------------------------------------------- |
+| Framework | Astro 7                                       |
+| UI        | SolidJS, Tailwind CSS 4, tailwind-variants    |
+| Tooling   | TypeScript, Biome, Bun                        |
+| Hosting   | Vercel                                        |
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Attribution
 
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `bun install`             | Installs dependencies                            |
-| `bun dev`             | Starts local dev server at `localhost:4321`      |
-| `bun build`           | Build your production site to `./dist/`          |
-| `bun preview`         | Preview your build locally, before deploying     |
-| `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `bun astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- **Fonts**: [Geist and Geist Mono](https://vercel.com/font) by Vercel, licensed under the [SIL Open Font License 1.1](https://github.com/vercel/geist-font/blob/main/LICENSE.txt), served via [Fontsource](https://fontsource.org)
+- **Background simulations**: [Langton's Ant](https://en.wikipedia.org/wiki/Langton%27s_ant) devised by Chris Langton, and [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) devised by John Horton Conway
+- **Logos**: Company logos (located at 'src/assets/logos') are trademarks of their respective owners and are used only to identify organizations and projects
+- **Libraries**: [Astro](https://github.com/withastro/astro), [SolidJS](https://github.com/solidjs/solid), [Tailwind CSS](https://github.com/tailwindlabs/tailwindcss), [tailwind-variants](https://github.com/heroui-inc/tailwind-variants), [html2pdf.js](https://github.com/eKoopmans/html2pdf.js), and [Biome](https://github.com/biomejs/biome)
