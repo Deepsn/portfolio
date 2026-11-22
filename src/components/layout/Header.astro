@@ -1,10 +1,13 @@
 ---
+import PopupArrow from "@/assets/icons/popup-arrow.svg";
+
 const links = [
-	{ label: "projects", href: "/#projects" },
 	{ label: "career", href: "/#career" },
 	{ label: "academic", href: "/#academic" },
+	{ label: "projects", href: "/projects" },
 	{ label: "about", href: "/about" },
 	{ label: "source", href: "https://github.com/Deepsn/portfolio" },
+	{ label: "resume", href: "/resume" },
 ];
 
 const currentPath = Astro.url.pathname.replace(/\/$/, "");
@@ -20,12 +23,13 @@ const currentPath = Astro.url.pathname.replace(/\/$/, "");
 			{
 				links.map((link) => {
 					const isCurrent = link.href === currentPath;
+					const isExternal = link.href.startsWith("http");
 
 					return (
 						<li>
 							<a
 								class:list={[
-									"group flex items-center gap-2 transition-colors hover:text-foreground",
+									"inline-flex items-center transition-colors hover:text-foreground",
 									isCurrent
 										? "text-foreground"
 										: "text-muted-foreground",
@@ -34,6 +38,11 @@ const currentPath = Astro.url.pathname.replace(/\/$/, "");
 							>
 								{link.href.includes("#") ? "#" : "/"}
 								{link.label}
+								{isExternal && (
+									<span>
+										<PopupArrow />
+									</span>
+								)}
 							</a>
 						</li>
 					);
