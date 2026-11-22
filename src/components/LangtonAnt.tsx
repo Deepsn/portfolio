@@ -36,6 +36,14 @@ interface Simulation {
 
 const wrap = (value: number, size: number) => ((value % size) + size) % size;
 
+const SIDE_SPAWN_ZONE = 0.3;
+
+const randomSideBiasedX = (cols: number) => {
+	const offset = Math.random() ** 2 * SIDE_SPAWN_ZONE;
+	const fraction = Math.random() < 0.5 ? offset : 1 - offset;
+	return Math.min(cols - 1, Math.floor(fraction * cols));
+};
+
 export function LangtonAnt() {
 	let containerRef!: HTMLDivElement;
 	let canvasRef!: HTMLCanvasElement;
@@ -95,7 +103,7 @@ export function LangtonAnt() {
 			gapPx = Math.round(CELL_GAP * pixelRatio);
 
 			const cells = new Uint8Array(cols * rows);
-			let ants: Ant[];
+			let ants: Ant[] = [];
 
 			if (sim.cols > 0) {
 				const offsetX = Math.floor((cols - sim.cols) / 2);
@@ -116,12 +124,16 @@ export function LangtonAnt() {
 					y: wrap(ant.y + offsetY, rows),
 					direction: ant.direction,
 				}));
-			} else {
-				ants = Array.from({ length: ANT_COUNT }, () => ({
-					x: Math.floor(Math.random() * cols),
+			}
+
+			const viewportHeight = Math.max(1, window.innerHeight);
+			const targetAnts = Math.max(ANT_COUNT, Math.round((ANT_COUNT * containerRef.clientHeight) / viewportHeight));
+			while (ants.length < targetAnts) {
+				ants.push({
+					x: randomSideBiasedX(cols),
 					y: Math.floor(Math.random() * rows),
 					direction: Math.floor(Math.random() * 4),
-				}));
+				});
 			}
 
 			sim = { cols, rows, cells, ants };
@@ -224,7 +236,7 @@ export function LangtonAnt() {
 
 	return (
 		<>
-			<div class="fixed inset-0 z-[-1] overflow-hidden">
+			<div class="absolute inset-0 z-[-1] overflow-hidden">
 				<div class="absolute inset-0 mask-[linear-gradient(to_right,rgb(0_0_0/0.25),black_65%)]" ref={containerRef}>
 					<canvas class="block" ref={canvasRef} role="img" />
 				</div>
