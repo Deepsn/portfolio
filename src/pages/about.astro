@@ -1,22 +1,14 @@
 ---
 import Badge from "@/components/layout/Badge.astro";
+import Page from "@/components/ui/Page.astro";
 import { beganYear, experienceYears, stack } from "@/data/about";
 import Layout from "@/layouts/Layout.astro";
 import { link } from "@/styles/variants/link";
 ---
 
 <Layout>
-	<section class="mx-auto w-full max-w-6xl scroll-mt-24 p-6 sm:p-10 lg:p-14">
-		<header class="max-w-2xl">
-			<h1
-				class="mt-2 text-4xl font-semibold tracking-tight text-balance sm:text-5xl"
-				id="about-title"
-			>
-				About me
-			</h1>
-		</header>
-
-		<div class="mt-12 grid gap-10 lg:grid-cols-[1fr_20rem] lg:gap-16">
+	<Page id="about" title="About me">
+		<div class="grid gap-10 lg:grid-cols-[1fr_20rem] lg:gap-16">
 			<div
 				class="max-w-2xl space-y-5 text-lg leading-relaxed text-muted-foreground"
 			>
@@ -87,5 +79,5 @@ import { link } from "@/styles/variants/link";
 				}
 			</div>
 		</section>
-	</section>
+	</Page>
 </Layout>

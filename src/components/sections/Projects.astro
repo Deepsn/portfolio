@@ -1,23 +1,26 @@
 ---
 import ProjectCard from "@/components/layout/ProjectCard.astro";
+import Page from "@/components/ui/Page.astro";
 import Section from "@/components/ui/Section.astro";
 import { projects } from "@/data/projects";
 
 interface Props {
 	visible?: number;
+	page?: boolean;
 }
 
-const { visible: projectsSize } = Astro.props;
+const { visible: projectsSize, page = false } = Astro.props;
 const visibleProjects =
 	projectsSize && projectsSize > 0
 		? projects.slice(0, projectsSize)
 		: projects;
+const Wrapper = page ? Page : Section;
 ---
 
-<Section id="projects" title="Projects that I worked on">
+<Wrapper id="projects" title="Projects that I worked on">
 	<ol class="border-t border-border">
 		{visibleProjects.map((project) => <ProjectCard {...project} />)}
 	</ol>
 
 	<slot />
-</Section>
+</Wrapper>
